@@ -2,12 +2,20 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Firebase from 'firebase'
 import App from './App'
-import { config } from '../../config-javascript-web/config.js'
+import { prodConfig } from '../../config-javascript-web/prod/config.js'
+import { testConfig } from '../../config-javascript-web/test/config.js'
+import { config } from '../../config-javascript-web/dev/config.js'
 import { routes } from './routes'
 import { store } from './store'
 
 // Initialize Firebase
-Firebase.initializeApp(config)
+if (process.env.NODE_ENV === 'prod') {
+  Firebase.initializeApp(prodConfig)
+} else if (process.env.NODE_ENV === 'test') {
+  Firebase.initializeApp(testConfig)
+} else {
+  Firebase.initializeApp(config)
+}
 
 // Set-up and use the Vue Router
 // Pass in your routes and then
